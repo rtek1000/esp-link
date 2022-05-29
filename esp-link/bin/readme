@@ -74,6 +74,83 @@ Known issues:
 Setting the baud rate via telnet escapes has issues, see #239. This is fixed in later versions.
 
 
+Release 2.2.3
+Version 2.2.3 is close to 2.2.beta2, which has been stable, but includes a number of bug fixes. If you have trouble with 2.2.3 please try 2.2.beta2.
+
+Features:
+port 23 transparent bridge, port 2323 programming bridge
+AVR, ARM & esp8266 flashing support (using port 23 and 2323)
+built-in programmer for AVRs, auto-switches baud rate to 9600/57600/115200
+outbound HTTP REST requests from attached microcontroller using espduino library and protocol
+built-in MQTT client that can be used by attached uC using espduino library and protocol
+over-the-air (OTA) reflashing of the esp if your module has 1MB or more flash (e.g. esp-12 but not esp-01)
+console page to see the attached uC's output
+simple debug log page to view the esp-link's own os_printf output
+buttons to reset the uC and change the baud rate
+pin configuration selector to change GPIO function assignments
+web page to configure MQTT client and built-in status message publishing
+mDNS, syslog, and SNTP support
+saving of configuration changes in flash
+Warnings
+The 2.2 series breaks SLIP (mqtt & rest) compatibility with 2.1.7: the standard slip control characters are used and all the REST and MQTT commands have been overhauled. Please also use the new el-client library on the arduino side.
+Over-the-air upgrades of esp-link are no longer supported on esp8266 modules with 512KB of flash. You need
+a module with more flash (such as an esp-12) for this to be possible. On the bright side: all the other features of
+esp-link work great on the older modules.
+Changes since v2.2.beta2:
+Fix AP-only mode and some AP password stuff
+Reduce memory usage when syslog is off
+Switch to SDK 1.5.4
+Misc other fixes
+Install via serial upload
+The short version for the serial install is:
+
+flash boot_v1.5.bin from the official esp_iot_sdk_v1.5.1 and included in the release tgz to 0x00000
+flash blank.bin from the official SDK and also included in the tgz to 0x3FE000
+flash user1.bin to 0x01000
+be sure to use the commandline flags when flashing the bootloader to set the correct flash size
+32Mbit / 4Mbyte module
+On Linux using esptool.py this turns into the following for a 32mbit=4MByte flash chip, such as an esp-12 module typically has:
+
+curl -L https://github.com/jeelabs/esp-link/releases/download/v2.2.3/esp-link-v2.2.3.tgz | \
+    tar xzf -
+cd esp-link-v2.2.3
+esptool.py --port /dev/ttyUSB0 --baud 460800 write_flash -fs 32m -ff 80m \
+    0x00000 boot_v1.5.bin 0x1000 user1.bin 0x3FE000 blank.bin
+I use a high baud rate as shown above because I'm impatient, but that's not required.
+
+4Mbit / 512Kbyte module
+curl -L https://github.com/jeelabs/esp-link/releases/download/v2.2.3/esp-link-v2.2.3.tgz | \
+    tar xzf -
+cd esp-link-v2.2.3
+esptool.py --port /dev/ttyUSB0 --baud 460800 write_flash -fs 4m -ff 40m \
+    0x00000 boot_v1.5.bin 0x1000 user1.bin 0x7E000 blank.bin
+The `-fs 4m -ff40m' options say 4Mbits and 40Mhz as opposed to 32Mbits at 80Mhz for the 4MByte flash modules. Note the different address for blank.bin (the SDK stores its wifi settings near the end of flash, so it changes with flash size).
+
+Upgrade over-the-air
+To upgrade from an earlier version 2.x of esp-link:
+
+curl -L https://github.com/jeelabs/esp-link/releases/download/v2.2.3/esp-link-v2.2.3.tgz | \
+    tar xzf -
+cd esp-link-2.2.3
+./wiflash <esp-hostname> user1.bin user2.bin
+Installing esptool.py
+On Linux use esptool.py to flash the esp8266.
+If you're a little python challenged then the following install instructions might help:
+
+Install ez_setup with the following two commands (I believe this will do something
+reasonable if you already have it):
+
+wget https://bootstrap.pypa.io/ez_setup.py
+python ez_setup.py
+Install esptool.py:
+
+git clone https://github.com/themadinventor/esptool.git
+cd esptool
+python setup.py install
+cd ..
+esptool.py -h
+
+
 Release 2.2.beta2 Pre-release
 This is a beta release
 For a stable release, please use https://github.com/jeelabs/esp-link/releases/tag/v2.1.7
