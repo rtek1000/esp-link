@@ -1,0 +1,74 @@
+See sources at https://github.com/jeelabs/esp-link/releases
+
+Release 3.2.47 alpha Pre-release
+Warning: some users have trouble getting this release to work. After flashing nothing happens. Please use 3.0.14 instead for now.
+I have been unable to reproduce the problem so far, all my modules work fine. The symptoms are that after flashing the esp8266 doesn't boot into the firmware and only one line is printed on the uart. I'm trying to find a solution but without being able to reproduce the problem it's a bit difficult.
+
+Warning: this is an Alpha release
+For a stable release, please use Release 3.0.14
+
+Version v3.2 includes some improvements and bug fixes over v3.0.14, notably support for programming Arduino Mega with an ATmega2560 chip. The first alpha for v3.2 was released June 17th 2017 as v3.1.85. (v3.1 was never released further because I messed-up the numbering, so I moved on to v3.2.x.)
+
+Download: http://s3.voneicken.com/esp-link/esp-link-v3.2.47-g9c6530d.tgz
+
+For flashing and upgrade instructions see FLASHING.md
+
+New in 3.2 over 2.x
+support to program ATmega2560
+support for rs485 serial protocol
+split up large TCP responses before forwarding to attached uC
+custom web pages
+rudimentary support for outgoing UDP and TCP connections initiated by the attached uC
+Telnet protocol controls for baud rate, parity, data size, break
+switch to Espressif SDK v2.1.0
+Features:
+port 23 transparent bridge, port 2323 programming bridge
+AVR, ATmega & ARM flashing support (using port 23 and 2323)
+built-in programmer for AVRs & ATmega2560, auto-switches baud rate to 9600/57600/115200
+outbound HTTP REST requests from attached microcontroller using espduino library and protocol
+built-in MQTT client that can be used by attached uC using espduino library and protocol
+upload web pages to esp-link and let esp-link make callbacks to the attached uC to fill in values dynamically or handle button clicks and form submissions
+over-the-air (OTA) reflashing of the esp if your module has 1MB or more flash (e.g. esp-12 but not esp-01), now using either commandlin push model or web-browser upload model
+console page to see the attached uC's output
+simple debug log page to view the esp-link's own os_printf output
+buttons to reset the uC and change the baud rate
+pin configuration selector to change GPIO function assignments
+web page to configure MQTT client and built-in status message publishing
+mDNS, syslog, and SNTP support
+saving of configuration changes in flash
+v3.2 must be built with the Espressif "NONOS" SDK 2.1.0
+
+
+Release 3.0.14 Latest
+Version v3.0 includes many bug fixes and several improvements over v2.2.3. v3.0.14 was released as an alpha Dec 16, 2016 and promoted to stable Jun 17, 2017.
+
+Download: http://s3.voneicken.com/esp-link/esp-link-v3.0.14-g963ffbb.tgz
+
+For flashing and upgrade instructions see
+FLASHING.md
+
+New in 3.0 over 2.x
+custom web pages
+rudimentary support for outgoing UDP and TCP connections initiated by the attached uC
+Telnet protocol controls for baud rate, parity, data size
+Features:
+port 23 transparent bridge, port 2323 programming bridge
+AVR & ARM flashing support (using port 23 and 2323)
+built-in programmer for AVRs, auto-switches baud rate to 9600/57600/115200
+outbound HTTP REST requests from attached microcontroller using espduino library and protocol
+built-in MQTT client that can be used by attached uC using espduino library and protocol
+upload web pages to esp-link and let esp-link make callbacks to the attached uC to fill in values dynamically or handle button clicks and form submissions
+over-the-air (OTA) reflashing of the esp if your module has 1MB or more flash (e.g. esp-12 but not esp-01), now using either commandlin push model or web-browser upload model
+console page to see the attached uC's output
+simple debug log page to view the esp-link's own os_printf output
+buttons to reset the uC and change the baud rate
+pin configuration selector to change GPIO function assignments
+web page to configure MQTT client and built-in status message publishing
+mDNS, syslog, and SNTP support
+saving of configuration changes in flash
+v3.0 must be built with the Espressif "NONOS" SDK 2.0.0 plus the 20160809 patch
+Known issues:
+
+Setting the baud rate via telnet escapes has issues, see #239. This is fixed in later versions.
+
+
